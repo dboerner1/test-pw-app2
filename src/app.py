@@ -22,7 +22,7 @@ crs = [
 '#F4C2E4','#BFC4CF']
 
 # Format title
-def format_title(title, subtitle=None,font_size=25, subtitle_font_size=15):
+def format_title(title, subtitle=None,font_size=20, subtitle_font_size=10):
     title =  f'<span style="font-size: {font_size}px;margin-bottom:50px;font-family:Roboto Medium;color:#2D426A">{title}</span>'
     if not subtitle:
         return title
@@ -97,37 +97,45 @@ app.layout = dbc.Container([
     dbc.Row([
         dbc.Col(
             html.Div("Define Asana prestige quantile cohorts:", className="me-0"),
-            width=2, className="me-0", style={'margin-right': '0px', 'margin-top': '10px', 'font-size': '1.2em'}
+            xs=2, sm=2, md=2, lg=2, xl=2, xxl=2, className="me-0", style={'margin-right': '0px', 'margin-top': '10px', 'font-size': '1.2em'}
         ),
         dbc.Col(
             dcc.RangeSlider(0, 100, value=[b1_in,t1_in,b2_in,t2_in],
                             marks=None, pushable=10, allowCross=False,
                             tooltip={"placement": "bottom", "always_visible": True,"style": {"fontSize": "12px"}},
                             id='slider-groups'),
-            width=5, align="center", className="ms-0 float-start", style={'margin-left': '0px'}
+            xs=4, sm=4, md=4, lg=4, xl=4, xxl=4, align="center", className="ms-0 float-start", style={'margin-left': '0px', 'margin-right': '0px'}
         ),
         dbc.Col(
             dash_table.DataTable(
                 id='stats',
                 data=stats_in,
                 style_cell={'textAlign': 'center'}),
-            width=5, align="center"
+            xs=5, sm=5, md=5, lg=5, xl=5, xxl=5, align="left", style={'margin-left': '0px', 'margin-right': '0px'}
         )
-    ], className="g-0 gap-0 justify-content-start align-bottom"),
+    ], className="g-0 gap-0 justify-content-start align-bottom"
+    ),
     dbc.Row([
         dbc.Col(
             dcc.Graph(id='roles_bar', config={'displayModeBar': False}),
-            width=4, style={"height": "100%"},
+            # width="auto"
+            xs=4
+            # xs=4, sm=4, md=4, lg=4, xl=4, xxl=4, style={"height": "100%"}, align="center"
         ),
         dbc.Col(
             dcc.Graph(id='seniority_bar', config={'displayModeBar': False}),
-            width=4, style={"height": "100%"},
+            # width="auto"
+            xs=4, align="left"
+            # xs=2, sm=2, md=2, lg=2, xl=2, xxl=2, style={"height": "100%"}, align="center"
         ),
         dbc.Col(
             dcc.Graph(id='msa_bar',  config={'displayModeBar': False}),
-            width=4, style={"height": "100%"},
+            # width="auto"
+            xs=4
+            # xs=4, sm=4, md=4, lg=4, xl=4, xxl=4, style={"height": "100%"}, align="right"
         )
-    ], className="g-0 gap-0 justify-content-start align-bottom h-75"),
+    ], className="justify-content-start align-bottom h-75 g-0 gap-0"
+    ),
 ], fluid = True, style={"height": "100vh"})
 
 
@@ -189,7 +197,7 @@ def update_graph(ranges_chosen):
     trace = go.Bar(
         y = roles_tail['role_k150'],
         x = roles_tail['diff'],
-        textfont=dict(family="Roboto", size=12, color="white"),
+        textfont=dict(family="Roboto", size=10, color="white"),
         marker_color=crs[5],
         text=round(roles_tail["diff"]* 100, 1).astype(str) + " p.p.",
         customdata = round(roles_tail["diff"]* -100, 1).astype(str) + " p.p.",
@@ -209,7 +217,7 @@ def update_graph(ranges_chosen):
     trace = go.Bar(
         y = roles_head['role_k150'],
         x = roles_head['diff'],
-        textfont=dict(family="Roboto", size=12, color="white"),
+        textfont=dict(family="Roboto", size=10, color="white"),
         marker_color=crs[1],
         text=round(roles_head["diff"]* 100, 1).astype(str) + " p.p.",
         customdata = round(roles_head["diff"]* 100, 1).astype(str) + " p.p.",
@@ -218,7 +226,7 @@ def update_graph(ranges_chosen):
         textposition = 'auto'
     )
     roles_fig.add_trace(trace)
-    t = f'<span style="color:{crs[1]};">High-</span> and <span style="color:{crs[5]};">low-</span>prestige roles at Asana'
+    t = f'<span style="color:{crs[1]};">High-</span> and <span style="color:{crs[5]};">low-</span>prestige roles'
     s = "Percentage-point difference in cohort makeup"
     roles_fig.update_layout(
         barmode = 'group', 
@@ -227,7 +235,7 @@ def update_graph(ranges_chosen):
             gridcolor = '#EAECF0', 
             gridwidth = 1, 
             showgrid = False,
-            tickfont = dict(family="Roboto", size=14, color="#2D426A")
+            tickfont = dict(family="Roboto", size=10, color="#2D426A")
         ),
         xaxis = dict(
             visible = False, 
@@ -242,14 +250,14 @@ def update_graph(ranges_chosen):
             tickfont = dict(family="Roboto", size=16, color="#2D426A")
         ),
         showlegend = False,
-        title = dict(text = format_title(t,s, font_size=25, subtitle_font_size=15), 
+        title = dict(text = format_title(t,s), 
                     yanchor = 'top', y = 0.85, xanchor = 'left', x = 0.02),
         plot_bgcolor = 'rgba(0,0,0,0)',
-        height=500,
-        hoverlabel = dict(bgcolor = 'white', bordercolor = '#2D426A', font = dict(size=12, family='Roboto Mono', color="#2D426A")),
+        # height=500,
+        hoverlabel = dict(bgcolor = 'white', bordercolor = '#2D426A', font = dict(size=10, family='Roboto Mono', color="#2D426A")),
         margin = dict(
             l = 0,  # default: 80
-            r = 0,  # default: 80
+            r = 40,  # default: 80
             b = 0,  # default: 80
             t = 100, # default: 100
             pad = 0  # default: 0
@@ -271,7 +279,7 @@ def update_graph(ranges_chosen):
     #cd2 = np.stack((seniorities2['count'].apply(lambda x: str(round(x*100, 1))+'%'), seniorities2['seniority']), axis=-1)
     seniorities_fig.add_trace(go.Pie(labels=seniorities2['seniority'], values=seniorities2['count'], domain = dict(y=[0, 0.5]),
                                      marker_colors=[crs[3], crs[4]], 
-                                     textposition='outside', textinfo='percent+label',texttemplate='%{label}<br>%{percent:.1%}',
+                                     textposition='outside', textinfo='percent+label',texttemplate='%{percent:.1%}',#texttemplate='%{label}<br>%{percent:.1%}',
                                      #customdata=[str(round(x*100, 1))+'%' for x in seniorities2.values],
                                      customdata=seniorities2['count'].apply(lambda x: str(round(x*100, 1))+'%'),
                                      hovertemplate= '<b>%{customdata}</b> of higher prestige Asana employees are <b>%{label}</b> level.<extra></extra>'
@@ -281,7 +289,7 @@ def update_graph(ranges_chosen):
     #cd1 = np.stack((seniorities1['count'].apply(lambda x: str(round(x*100, 1))+'%'), seniorities1['seniority']), axis=-1)
     seniorities_fig.add_trace(go.Pie(labels=seniorities1['seniority'], values=seniorities1['count'], domain = dict(y=[0.5, 1]),
                                      marker_colors=[crs[3], crs[4]], 
-                                     textposition='outside', textinfo='percent+label',texttemplate='%{label}<br>%{percent:.1%}',
+                                     textposition='outside', textinfo='percent+label',texttemplate='%{percent:.1%}',#texttemplate='%{label}<br>%{percent:.1%}'
                                      #customdata=[str(round(x*100, 1))+'%' for x in seniorities1.values],
                                      customdata=seniorities1['count'].apply(lambda x: str(round(x*100, 1))+'%'),
                                      hovertemplate= '<b>%{customdata}</b> of lower prestige Asana employees are <b>%{label}</b> level.<extra></extra>'
@@ -292,7 +300,7 @@ def update_graph(ranges_chosen):
 
 
 
-    t = f'Asana Seniority makeup'
+    t = f'Seniority makeup'
     seniorities_fig.update_layout(
         yaxis = dict(title = "",
                     zeroline = False,
@@ -313,26 +321,28 @@ def update_graph(ranges_chosen):
                      tickangle=360
                      #title_standoff = 50
                 ),
-        showlegend = False,  
-        font = dict(family = "Roboto", size = 14, color = "#2D426A"),
-        title = dict(text = format_title(t, font_size=25, subtitle_font_size=15), 
-                    yanchor = 'top', y = 0.9, xanchor = 'center', x = 0.5, xref='paper'),
+        showlegend = True, 
+        legend=dict(bgcolor='rgba(0,0,0,0)', xanchor='center', yanchor='middle', x=0.5, y=0.53, font = dict(family="Roboto", size=10, color="#2D426A"),
+                    traceorder='reversed'), 
+        font = dict(family = "Roboto", size = 10, color = "#2D426A"),
+        title = dict(text = format_title(t), 
+                    yanchor = 'top', y = 0.87, xanchor = 'center', x = 0.5, xref='paper'),
         plot_bgcolor='rgba(0,0,0,0)',
-        height = 500,
+        #height = 500,
         hoverlabel = dict(
             bgcolor = "white",
             bordercolor = "#2D426A",
-            font = dict(size=12, family='Roboto Mono', color="#2D426A")
+            font = dict(size=10, family='Roboto Mono', color="#2D426A")
         ),
         margin = dict(
-            l = 0,  # default: 80
-            r = 0,  # default: 80
+            l = 40,  # default: 80
+            r = 40,  # default: 80
             b = 0,  # default: 80
             t = 100, # default: 100
             pad = 0  # default: 0
             )
     )
-
+    seniorities_fig.update_annotations(font=dict(size=10))
 
     metros2 = (positions2['metro_area'].value_counts()/positions2['metro_area'].value_counts().sum()).to_frame()
     metros2.columns = ['higher_prestige_pct']
@@ -347,7 +357,7 @@ def update_graph(ranges_chosen):
     trace = go.Bar(
         y = metros_tail['metro_area'].apply(lambda x: x.split(' metropolitan area')[0].title()),
         x = metros_tail['diff'],
-        textfont=dict(family="Roboto", size=12, color="white"),
+        textfont=dict(family="Roboto", size=10, color="white"),
         marker_color=crs[5],
         text=round(metros_tail["diff"]* 100, 1).astype(str) + " p.p.",
         customdata = round(metros_tail["diff"]* -100, 1).astype(str) + " p.p.",
@@ -367,7 +377,7 @@ def update_graph(ranges_chosen):
     trace = go.Bar(
         y = metros_head['metro_area'].apply(lambda x: x.split(' metropolitan area')[0].title()),
         x = metros_head['diff'],
-        textfont=dict(family="Roboto", size=12, color="white"),
+        textfont=dict(family="Roboto", size=10, color="white"),
         marker_color=crs[1],
         text=round(metros_head["diff"]* 100, 1).astype(str) + " p.p.",
         customdata = round(metros_head["diff"]* 100, 1).astype(str) + " p.p.",
@@ -376,7 +386,7 @@ def update_graph(ranges_chosen):
         textposition = 'auto'
     )
     metros_fig.add_trace(trace)
-    t = f'<span style="color:{crs[1]};">High-</span> and <span style="color:{crs[5]};">low-</span>prestige areas for Asana'
+    t = f'<span style="color:{crs[1]};">High-</span> and <span style="color:{crs[5]};">low-</span>prestige areas'
     s = "Percentage-point difference in cohort makeup"
     metros_fig.update_layout(
         barmode = 'group', 
@@ -385,7 +395,7 @@ def update_graph(ranges_chosen):
             gridcolor = '#EAECF0', 
             gridwidth = 1, 
             showgrid = False,
-            tickfont = dict(family="Roboto", size=14, color="#2D426A")
+            tickfont = dict(family="Roboto", size=10, color="#2D426A")
         ),
         xaxis = dict(
             visible = False, 
@@ -400,13 +410,13 @@ def update_graph(ranges_chosen):
             tickfont = dict(family="Roboto", size=16, color="#2D426A")
         ),
         showlegend = False,
-        title = dict(text = format_title(t,s, font_size=25, subtitle_font_size=15), 
+        title = dict(text = format_title(t,s), 
                     yanchor = 'top', y = 0.85, xanchor = 'left', x = 0.02),
         plot_bgcolor = 'rgba(0,0,0,0)',
-        height=500,
-        hoverlabel = dict(bgcolor = 'white', bordercolor = '#2D426A', font = dict(size=12, family='Roboto Mono', color="#2D426A")),
+        # height=500,
+        hoverlabel = dict(bgcolor = 'white', bordercolor = '#2D426A', font = dict(size=10, family='Roboto Mono', color="#2D426A")),
         margin = dict(
-            l = 0,  # default: 80
+            l = 80,  # default: 80
             r = 0,  # default: 80
             b = 0,  # default: 80
             t = 100, # default: 100
@@ -419,6 +429,7 @@ def update_graph(ranges_chosen):
 
 
     return stats_out, roles_fig, seniorities_fig, metros_fig
+    # return stats_out, roles_fig, metros_fig
 
 
 
