@@ -376,7 +376,7 @@ def update_graph(ranges_chosen):
         textposition = 'auto'
     )
     metros_fig.add_trace(trace)
-    t = f'<span style="color:{crs[1]};">High-</span> and <span style="color:{crs[5]};">low-</span>prestige metro areas for Asana'
+    t = f'<span style="color:{crs[1]};">High-</span> and <span style="color:{crs[5]};">low-</span>prestige areas for Asana'
     s = "Percentage-point difference in cohort makeup"
     metros_fig.update_layout(
         barmode = 'group', 
